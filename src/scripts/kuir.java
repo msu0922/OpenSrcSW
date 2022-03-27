@@ -14,6 +14,7 @@ public class kuir {
         // Run - Edit Configurations... - Program arguments에 필요한 값 작성
         // makeCollection.java 실행 시:    -c ./data/
         // makeKeyword.java 실행 시:       -k ./collection.xml
+        // indexer.java 실행 시,           -i ./index.xml
 
         String command = args[0];
         String path = args[1];
@@ -24,6 +25,9 @@ public class kuir {
         } else if (command.equals("-k")) {
             makeKeyword keyword = new makeKeyword(path); // collection.xml 경로
             keyword.convertXml();
+        } else if (command.equals("-i")) {
+            indexer index = new indexer(path); // index.xml 경로
+            index.convertPost();
         }
     }
 }
