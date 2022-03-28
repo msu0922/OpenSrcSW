@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 
+@SuppressWarnings("unchecked")
 public class indexer {
     private String data_path;
     private String output_file = "./index.post";
