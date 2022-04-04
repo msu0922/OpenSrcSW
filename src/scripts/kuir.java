@@ -15,6 +15,8 @@ public class kuir {
         // makeCollection.java 실행 시:    -c ./data/
         // makeKeyword.java 실행 시:       -k ./collection.xml
         // indexer.java 실행 시:           -i ./index.xml
+        // searcher.java 실행 시:           -s ./index.post -q "query"
+
 
         String command = args[0];
         String path = args[1];
@@ -28,6 +30,15 @@ public class kuir {
         } else if (command.equals("-i")) {
             indexer index = new indexer(path); // index.xml 경로
             index.convertPost();
+        } else if (command.equals("-s")) {
+            searcher search = new searcher(path);
+
+            String qCommand = args[2];
+            String query = args[3];
+
+            if (qCommand.equals("-q")) {
+                search.CalcSim(query);
+            }
         }
     }
 }
