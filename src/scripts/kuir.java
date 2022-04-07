@@ -37,7 +37,7 @@ public class kuir {
             String query = args[3];
 
             if (qCommand.equals("-q")) {
-                search.CalcSim(query);
+                search.printCosSim(search.CalcSim(query));
             }
         }
     }
