@@ -21,7 +21,7 @@ public class searcher {
         this.input_file = file; // ./index.post
     }
 
-    public void CalcSim(String query) throws IOException, ClassNotFoundException, ParserConfigurationException, SAXException {
+    public void InnerProduct(String query) throws IOException, ClassNotFoundException, ParserConfigurationException, SAXException {
         this.input_query = query;
 
         KeywordExtractor ke = new KeywordExtractor();
