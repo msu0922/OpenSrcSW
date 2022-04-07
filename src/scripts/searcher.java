@@ -61,7 +61,7 @@ public class searcher {
             }
         }
 
-        // id = i와 keyword k의 유사도 조사
+        // id = i와 keyword k의 유사도(inner product) 조사; resultArr[i] = Q⋅id(i)
         for (int i = 0; i < idCount; i++) {
             for (int k = 0; k < kl.size(); k++) {
                 resultArr[i] += indexerValArr[k][i] * kl.get(k).getCnt();
