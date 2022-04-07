@@ -19,8 +19,9 @@
      └── scripts
             ├── kuir.java
             ├── makeCollection.java
-            ├── makeKeyword.java 
-            └── indexer.java
+            ├── makeKeyword.java
+            ├── indexer.java 
+            └── searcher.java
 
 ``` 
 
@@ -64,6 +65,8 @@ ex) `java -cp ./jars/jsoup-1.14.3.jar:./jars/kkma-2.1.jar:bin scripts.kuir -k ./
 
 ex) `java -cp ./jars/jsoup-1.14.3.jar:./jars/kkma-2.1.jar:bin scripts.kuir -i ./index.xml`
 
+ex) `java -cp ./jars/jsoup-1.14.3.jar:./jars/kkma-2.1.jar:bin scripts.kuir -s ./index.post -q "query 내용"`
+
 
 ### WINDOWS
 
@@ -74,3 +77,5 @@ ex) `java -cp ./jars/jsoup-1.13.1.jar;./jars/kkma-2.1.jar;bin scripts.kuir -c ./
 ex) `java -cp ./jars/jsoup-1.13.1.jar;./jars/kkma-2.1.jar;bin scripts.kuir -k ./collection.xml`
 
 ex) `java -cp ./jars/jsoup-1.13.1.jar;./jars/kkma-2.1.jar;bin scripts.kuir -i ./index.xml`
+
+ex) `java -cp ./jars/jsoup-1.13.1.jar;./jars/kkma-2.1.jar;bin scripts.kuir -s ./index.post -q "query 내용"`
