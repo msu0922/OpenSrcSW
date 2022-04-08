@@ -77,23 +77,23 @@ public class searcher { // master 브랜치 searcher.java
 		double[] denominator = new double[idCount]; // cos의 분모값
 
 		for (int k = 0; k < kl.size(); k++) {
-			kwrdFreq += Math.pow(kl.get(k).getCnt(), 2); // 제곱해서 더하기
+			kwrdFreq += Math.pow(kl.get(k).getCnt(), 2); // 제곱해서 더하기 (query의 단어 빈도수 벡터 크기)
 		}
 
 		for (int i = 0; i < idCount; i++) {
 			kwrdWeight[i] = 0.0; // 초기화
 			for (int k = 0; k < kl.size(); k++) {
-				kwrdWeight[i] += Math.pow(indexerValArr[k][i], 2); // 제곱해서 더함
+				kwrdWeight[i] += Math.pow(indexerValArr[k][i], 2); // 제곱해서 더하기 (문서에서 query의 유사도 벡터)
 			}
-			denominator[i] = Math.sqrt(kwrdFreq) * Math.sqrt(kwrdWeight[i]);
+			denominator[i] = Math.sqrt(kwrdFreq) * Math.sqrt(kwrdWeight[i]); // 분모 계산
 		}
 
-		double[] cosSimilarity = new double[idCount]; // cosine similarity 저장 for each doc
+		double[] cosSimilarity = new double[idCount]; // cosine similarity 저장 배열
 
 		for (int i = 0; i < idCount; i++) {
-			if (denominator[i] != 0.0) {
+			if (denominator[i] != 0.0) { // 분모가 0이 아니면 계산
 				cosSimilarity[i] = dotPrdt[i] / denominator[i];
-			} else { // 분모가 0이면 NaN이기 때문에 0
+			} else { // 분모가 0이면 NaN 예외처리
 				cosSimilarity[i] = 0.0;
 			}
 		}
@@ -127,7 +127,7 @@ public class searcher { // master 브랜치 searcher.java
 		first = cosSim[findLargest(cosSim)];
 		if (findLargest(cosSim) != 0) {
 			id[0] = findLargest(cosSim); // first의 index값
-			System.out.println(title[id[0]] + " " + first);
+			System.out.println(title[id[0]] + " " + String.format("%.2f", first)); // 소수점 2자리까지 출력
 			cosSim[id[0]] = -1;
 		} else {
 			id[0] = -1;
@@ -136,7 +136,7 @@ public class searcher { // master 브랜치 searcher.java
 		second = cosSim[findLargest(cosSim)];
 		if (findLargest(cosSim) != 0) {
 			id[1] = findLargest(cosSim); // second의 index값
-			System.out.println(title[id[1]] + " " + second);
+			System.out.println(title[id[1]] + " " + String.format("%.2f", second)); // 소수점 2자리까지 출력
 			cosSim[id[1]] = -1;
 		} else {
 			id[1] = -1;
@@ -145,7 +145,7 @@ public class searcher { // master 브랜치 searcher.java
 		third = cosSim[findLargest(cosSim)];
 		if (findLargest(cosSim) != 0) {
 			id[2] = findLargest(cosSim); // third의 index값
-			System.out.println(title[id[2]] + " " + third);
+			System.out.println(title[id[2]] + " " + String.format("%.2f", third)); // 소수점 2자리까지 출력
 			cosSim[id[2]] = -1;
 		} else {
 			id[2] = -1;
