@@ -10,7 +10,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
@@ -24,9 +23,7 @@ public class searcher { // master 브랜치 searcher.java
 		this.input_file = file;
 	}
 
-	public double[] CalcSim(String query) throws IOException, ClassNotFoundException {
-		this.input_query = query;
-
+	public double[] InnerProduct(String query) throws IOException, ClassNotFoundException {
 		KeywordExtractor ke = new KeywordExtractor();
 		KeywordList kl = ke.extractKeyword(input_query, true); // input_query를 분리하여 kl 리스트에 저장
 
@@ -52,8 +49,8 @@ public class searcher { // master 브랜치 searcher.java
 		String[] tempIndexerSplit = tempIndexerVal.split(" ");
 		int idCount = tempIndexerSplit.length / 2;
 
-		double[][] indexerValArr = new double[kl.size()][idCount]; // indexerMap에서 kwrd(k)의 가중치: W0 W1 W2 W3 W4
-		double[] dotPrdt = new double[idCount]; // 결과를 저장할 배열
+		double[][] indexerValArr = new double[kl.size()][idCount];
+		double[] resultArr = new double[idCount]; // 결과를 저장할 배열
 
 		for (int k = 0; k < kl.size(); k++) {
 			Keyword kwrd = kl.get(k);
@@ -67,7 +64,46 @@ public class searcher { // master 브랜치 searcher.java
 		// id = i와 keyword k의 유사도(inner product) 조사; resultArr[i] = Q⋅id(i)
 		for (int i = 0; i < idCount; i++) {
 			for (int k = 0; k < kl.size(); k++) {
-				dotPrdt[i] += indexerValArr[k][i] * kl.get(k).getCnt();
+				resultArr[i] += indexerValArr[k][i] * kl.get(k).getCnt();
+			}
+		}
+
+		return resultArr;
+	}
+
+	public double[] CalcSim(String query) throws IOException, ClassNotFoundException {
+		this.input_query = query;
+
+		KeywordExtractor ke = new KeywordExtractor();
+		KeywordList kl = ke.extractKeyword(input_query, true); // input_query를 분리하여 kl 리스트에 저장
+
+		// keywordMap에 query의 keyword를 Key로, weight(tf)를 Value로 저장
+		HashMap keywordMap = new HashMap();
+
+		for (int k = 0; k < kl.size(); k++) { // 형태소 출력 및 빈도수 파악
+			Keyword kwrd = kl.get(k); // 형태소 추출 후 저장한 리스트 kl에서 keyword 하나씩 가져오기
+			keywordMap.put(kwrd, kwrd.getCnt()); // Key: 키워드, Value: 빈도수
+		}
+
+		// index.post Hashmap 불러오기 - object에 저장되어 있음
+		FileInputStream fileInputStream = new FileInputStream(input_file);
+		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+		Object object = objectInputStream.readObject();
+		objectInputStream.close();
+
+		HashMap indexerMap = (HashMap) object;
+
+		double[] dotPrdt = InnerProduct(query); // Q⋅id(i)
+		int idCount = dotPrdt.length;
+
+		double[][] indexerValArr = new double[kl.size()][idCount]; // indexerMap에서 kwrd(k)의 가중치: W0 W1 W2 W3 W4
+
+		for (int k = 0; k < kl.size(); k++) {
+			Keyword kwrd = kl.get(k);
+			String indexerVal = (String) indexerMap.get(kwrd.getString()); // 전체(indexerMap)에서 (kl에 저장되어있는)query의 kwrd를 검색하여 value 추출: 0 W0 1 W1 2 W2 3 W3 4 W4
+			String[] indexerSplit = indexerVal.split(" ");
+			for (int i = 0; i < idCount; i++) { // indexerVal에서 각 id별 weight값만 추출하여 indexerValArr[]에 저장
+				indexerValArr[k][i] = Double.parseDouble((indexerSplit[2*i + 1]));
 			}
 		}
 
