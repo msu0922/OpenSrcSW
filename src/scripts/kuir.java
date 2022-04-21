@@ -39,6 +39,15 @@ public class kuir {
             if (qCommand.equals("-q")) {
                 search.printCosSim(search.CalcSim(query));
             }
+        } else if (command.equals("-m")) {
+            MidTerm midTerm = new MidTerm(path);
+
+            String qCommand = args[2];
+            String query = args[3];
+
+            if (qCommand.equals("-q")) {
+                midTerm.showSnippet(query);
+            }
         }
     }
 }
